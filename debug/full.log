@@ -1,0 +1,47 @@
+Starting pipeline using declarative CocoIndex flows...
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 3879.26it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+Configuring Export Targets...
+Traceback (most recent call last):
+  File "/app/main.py", line 564, in <module>
+    docs_to_kg_flow.update()
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/flow.py", line 783, in update
+    return execution_context.run(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/runtime.py", line 64, in run
+    return fut.result()
+           ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/flow.py", line 803, in update_async
+    async with FlowLiveUpdater(
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/flow.py", line 625, in __aenter__
+    await self.start_async()
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/flow.py", line 643, in start_async
+    await self._flow.internal_flow_async(), dump_engine_object(self._options)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/flow.py", line 837, in internal_flow_async
+    return await asyncio.to_thread(self._internal_flow)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/flow.py", line 847, in _internal_flow
+    engine_flow = self._engine_flow_creator()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/cocoindex/flow.py", line 970, in _create_engine_flow
+    return flow_builder_state.engine_flow_builder.build_flow()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Target resource already exists: kind = Neo4j, key = {"connection":{"key":"Neo4jConnection"},"typ":{"Relationship":"RELATES_TO"}}

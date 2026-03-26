@@ -1,0 +1,6 @@
+cocoindex[embeddings]
+neo4j
+python-dotenv
+requests
+aiohttp
+aiolimiter
