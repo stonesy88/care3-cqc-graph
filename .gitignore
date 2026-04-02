@@ -4,3 +4,9 @@ __pycache__/
 venv/
 .idea/
 .vscode/
+shadowtraffic/license.env
+node_modules/
+web/.next/
+web/node_modules/
+.DS_Store
+*.log

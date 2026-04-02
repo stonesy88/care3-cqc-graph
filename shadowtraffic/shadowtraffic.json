@@ -1,0 +1,121 @@
+{
+  "generators": [
+    {
+      "name": "cqc-compliance-lifecycle",
+      "url": "http://web:3000/api",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "fork": {
+        "key": {
+          "_gen": "uuid"
+        },
+        "maxForks": 5000,
+        "concurrency": 10,
+        "stagger": {
+          "ms": {
+            "_gen": "uniformDistribution",
+            "bounds": [
+              500,
+              5000
+            ]
+          }
+        }
+      },
+      "localConfigs": {
+        "throttleMs": {
+          "_gen": "uniformDistribution",
+          "bounds": [
+            300,
+            800
+          ]
+        }
+      },
+      "data": {
+        "residentId": {
+          "_gen": "var",
+          "var": "forkKey"
+        },
+        "locationId": "1-106890455",
+        "eventId": "FALL_RESIDENT"
+      },
+      "stateMachine": {
+        "_gen": "stateMachine",
+        "initial": "FALL_RESIDENT",
+        "transitions": {
+          "FALL_RESIDENT": {
+            "_gen": "weightedOneOf",
+            "choices": [
+              {
+                "value": "OBS_NEURO",
+                "weight": 96
+              },
+              {
+                "value": "HALT",
+                "weight": 4
+              }
+            ]
+          },
+          "OBS_NEURO": {
+            "_gen": "weightedOneOf",
+            "choices": [
+              {
+                "value": "CALL_PARAMEDIC",
+                "weight": 99
+              },
+              {
+                "value": "HALT",
+                "weight": 1
+              }
+            ]
+          },
+          "CALL_PARAMEDIC": {
+            "_gen": "weightedOneOf",
+            "choices": [
+              {
+                "value": "NOTIFY_FAMILY",
+                "weight": 99
+              },
+              {
+                "value": "HALT",
+                "weight": 1
+              }
+            ]
+          }
+        },
+        "states": {
+          "FALL_RESIDENT": {
+            "urlSuffix": "/events",
+            "data": {
+              "actionId": "START"
+            }
+          },
+          "OBS_NEURO": {
+            "urlSuffix": "/actions",
+            "data": {
+              "actionId": "OBS_NEURO"
+            }
+          },
+          "CALL_PARAMEDIC": {
+            "urlSuffix": "/actions",
+            "data": {
+              "actionId": "CALL_PARAMEDIC"
+            }
+          },
+          "NOTIFY_FAMILY": {
+            "urlSuffix": "/actions",
+            "data": {
+              "actionId": "NOTIFY_FAMILY"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "connections": {
+    "rest-lifecycle": {
+      "kind": "webhook"
+    }
+  }
+}

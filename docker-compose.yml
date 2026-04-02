@@ -1,6 +1,7 @@
 services:
   neo4j:
     image: neo4j:5-community
+    profiles: ["core", "data"]
     ports:
       - "7474:7474"   # HTTP interface
       - "7687:7687"   # Bolt protocol
@@ -22,6 +23,7 @@ services:
   neo4j-init:
     # FIX: Changed to a Python image so it can actually run init_db.py
     image: python:3.11-slim 
+    profiles: ["core", "data"]
     depends_on:
       neo4j:
         condition: service_healthy
@@ -39,6 +41,7 @@ services:
 
   postgres:
     image: postgres:15-alpine
+    profiles: ["core", "data"]
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
@@ -50,6 +53,7 @@ services:
 
   pipeline:
     build: .
+    profiles: ["pipeline"]
     volumes:
       - .:/app
     environment:
@@ -68,16 +72,33 @@ services:
         condition: service_started
     networks:
       - cqc_network
-    command: python main.py
+    command: bash -c "pip install -U cocoindex && python cocoindex/pipeline.py"
     deploy:
       resources:
         limits:
           memory: 8G
 
+  restate:
+    image: docker.io/restatedev/restate:latest
+    profiles: ["restate"]
+    environment:
+      - RESTATE_BETA_FEATURES=true
+      - RESTATE_POSTGRES_ADDRESS=0.0.0.0:9001
+      - RESTATE_SQL_BIND_ADDRESS=0.0.0.0:9001
+      - RESTATE_SQL_ENABLED=true
+    ports:
+      - "8080:8080" # Ingress
+      - "9070:9070" # Admin API
+      - "9071:9071" # Metrics
+      - "9001:9001" # SQL Introspection
+    networks:
+      - cqc_network
+
   web:
-    image: node:20-alpine
+    image: node:20
+    profiles: ["core", "web"]
     working_dir: /app/web
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "npm install && npx next dev -H 0.0.0.0"
     ports:
       - "3000:3000"
     environment:
@@ -85,6 +106,8 @@ services:
       - NEO4J_PASSWORD=${NEO4J_PASSWORD}
       - EMBEDDER_URL=http://embedder:8001/embed
       - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - COCOINDEX_DATABASE_URL=postgres://postgres:password@postgres:5432/cocoindex
+      - HOSTNAME=0.0.0.0
     volumes:
       - .:/app
       - /app/web/node_modules
@@ -94,11 +117,34 @@ services:
       - neo4j
       - embedder
 
+  neo4j-grag:
+    build: 
+      context: ./neo4j-grag
+      dockerfile: Dockerfile
+    profiles: ["core", "ai"]
+    volumes:
+      - ./neo4j-grag:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USERNAME=neo4j
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - HYBRID_TOP_K=15
+      - CANDIDATE_K=60
+    networks:
+      - cqc_network
+    depends_on:
+      neo4j:
+        condition: service_healthy
+
   embedder:
     build: 
       context: ./embedder
       args:
         HF_TOKEN: ${HF_TOKEN}
+    profiles: ["core", "ai"]
     ports:
       - "8001:8001"
     environment:
@@ -106,11 +152,25 @@ services:
       - HF_TOKEN=${HF_TOKEN}
     networks:
       - cqc_network
-    # FIX: Prevent the second instance of Gemma from crashing the system
     deploy:
       resources:
         limits:
           memory: 4G
+
+  shadowtraffic:
+    image: shadowtraffic/shadowtraffic:latest
+    profiles: ["gen-events"]
+    env_file:
+      - ./shadowtraffic/license.env
+    ports:
+      - "9876:8080"
+    volumes:
+      - ./shadowtraffic:/workspace
+    command: --config /workspace/shadowtraffic.json --with-studio --watch --sample 50
+    networks:
+      - cqc_network
+    depends_on:
+      - web
 
 networks:
   cqc_network:

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Cranbourne House",
+    "id": "4:bc6c982b-be82-410a-9cda-da6ee6d2404e:409",
+    "group": "Location"
+  },
+  {
+    "name": "Safe",
+    "id": "4:bc6c982b-be82-410a-9cda-da6ee6d2404e:421",
+    "group": "KeyQuestionAssessment"
+  },
+  {
+    "name": "Safe environments",
+    "id": "4:bc6c982b-be82-410a-9cda-da6ee6d2404e:525",
+    "group": "QualityStatementAssessment"
+  },
+  {
+    "name": "Safe and effective staffing",
+    "id": "4:bc6c982b-be82-410a-9cda-da6ee6d2404e:524",
+    "group": "QualityStatementAssessment"
+  },
+  {
+    "name": "Required safety checks on window restrictors had not been robust.",
+    "id": "4:bc6c982b-be82-410a-9cda-da6ee6d2404e:178",
+    "group": "Finding"
+  },
+  {
+    "name": "Required safety checks on hot water outlets had not been robust.",
+    "id": "4:bc6c982b-be82-410a-9cda-da6ee6d2404e:164",
+    "group": "Finding"
+  },
+  {
+    "name": "Not all staff had received an up-to-date appraisal.",
+    "id": "4:bc6c982b-be82-410a-9cda-da6ee6d2404e:633",
+    "group": "Finding"
+  }
+]

@@ -1,0 +1,180 @@
+# yaml-language-server: $schema=https://api.icepanel.io/v1/schemas/LandscapeImportData
+modelObjects:
+  - id: domain-cqc-compliance
+    name: Care Quality Commission Domain
+    type: domain
+    description: >-
+      Core domain bounding the clinical compliance and graph observability
+      ecosystem.
+  - id: actor-care-manager
+    name: Care Manager / CIO
+    type: actor
+    description: >-
+      Views compliance dashboards, defines policy SLAs, and investigates CQC
+      risks.
+    parentId: domain-cqc-compliance
+  - id: actor-shadow-traffic
+    name: External Care System (ShadowTraffic)
+    type: actor
+    description: >-
+      Downstream digital care system (e.g., Nourish, PCS) emitting mock clinical
+      JSON events.
+    parentId: domain-cqc-compliance
+  - id: sys-beam-platform
+    name: Beam Compliance Engine
+    type: system
+    description: >-
+      Event-driven observability platform automating policy adherence and CQC
+      GraphRAG search.
+    parentId: domain-cqc-compliance
+  - id: sys-gemini-cloud
+    name: Google Gemini API
+    type: system
+    description: >-
+      External LLM service used for intent classification and final compliance
+      synthesis.
+    parentId: domain-cqc-compliance
+  - id: app-frontend-dashboard
+    name: Next.js Frontend Dashboard
+    type: app
+    description: >-
+      React/Tailwind UI containing the Policy Builder and Compliance Command
+      Center.
+    parentId: sys-beam-platform
+    technologyIds:
+      - 9ZYWgwsvAwKsjKK8lNgg
+    icon:
+      technologyId: 9ZYWgwsvAwKsjKK8lNgg
+  - id: app-backend-webhook
+    name: Next.js API Gateway & Webhook
+    type: app
+    description: >-
+      Ingress layer. Catches events, routes searches, and polls databases for
+      the UI.
+    parentId: sys-beam-platform
+    technologyIds:
+      - lvUyvYYpLK6PQCoaAeKR
+    icon:
+      technologyId: lvUyvYYpLK6PQCoaAeKR
+  - id: app-workflow-engine
+    name: Restate.dev Orchestrator
+    type: app
+    description: >-
+      Durable execution engine handling sleep states, SLA countdown timers, and
+      event signaling.
+    parentId: sys-beam-platform
+    technologyIds:
+      - unq9eBvtMu9rTTSQqqUP
+    icon:
+      technologyId: unq9eBvtMu9rTTSQqqUP
+  - id: app-data-pipeline
+    name: CocoIndex Ingestion Pipeline
+    type: app
+    description: >-
+      Recursively chunks CQC manuals and patient policies for the Graph
+      database.
+    parentId: sys-beam-platform
+    technologyIds:
+      - fK3P9HZzJS9tIt7J4tlb
+    icon:
+      technologyId: fK3P9HZzJS9tIt7J4tlb
+  - id: app-local-embedding
+    name: Gemma Local Embedding Engine
+    type: app
+    description: >-
+      Securely generates high-dimensional vectors for text without exposing
+      healthcare data to public APIs.
+    parentId: sys-beam-platform
+    technologyIds:
+      - fK3P9HZzJS9tIt7J4tlb
+    icon:
+      technologyId: fK3P9HZzJS9tIt7J4tlb
+  - id: store-relational-db
+    name: PostgreSQL Database
+    type: store
+    description: >-
+      Single source of truth for Policy definitions (JSONB) and active SLA
+      workflow states.
+    parentId: sys-beam-platform
+    technologyIds:
+      - AtAwOo48GPChCWOkPkkj
+    icon:
+      technologyId: AtAwOo48GPChCWOkPkkj
+  - id: store-graph-db
+    name: Neo4j Graph Database
+    type: store
+    description: >-
+      Stores the CQC Single Assessment Framework, operational event logs, and
+      predicted risk lineage. Handles RRF.
+    parentId: sys-beam-platform
+    technologyIds:
+      - W8iIqDisyImXOg1uArVp
+    icon:
+      technologyId: W8iIqDisyImXOg1uArVp
+modelConnections:
+  - id: conn-0
+    name: Connects
+    originId: actor-care-manager
+    targetId: app-frontend-dashboard
+    direction: outgoing
+    description: Defines policies and views active SLAs
+  - id: conn-1
+    name: HTTPS/JSON
+    originId: actor-shadow-traffic
+    targetId: app-backend-webhook
+    direction: outgoing
+    description: Emits clinical JSON events (e.g., Falls, Observations)
+  - id: conn-2
+    name: HTTPS/REST
+    originId: app-frontend-dashboard
+    targetId: app-backend-webhook
+    direction: bidirectional
+    description: Polls live SLA states and sends GraphRAG search queries
+  - id: conn-3
+    name: Prisma/SQL
+    originId: app-backend-webhook
+    targetId: store-relational-db
+    direction: bidirectional
+    description: Reads SLA rules and updates workflow tracking states
+  - id: conn-4
+    name: Cypher/Bolt
+    originId: app-backend-webhook
+    targetId: store-graph-db
+    direction: bidirectional
+    description: Logs immutable operational events and executes Hybrid Search (RRF)
+  - id: conn-5
+    name: gRPC/HTTP
+    originId: app-backend-webhook
+    targetId: app-workflow-engine
+    direction: outgoing
+    description: Triggers durable workflows and sends follow-up event signals
+  - id: conn-6
+    name: HTTPS/REST
+    originId: app-backend-webhook
+    targetId: sys-gemini-cloud
+    direction: bidirectional
+    description: Routes search intent and synthesizes CQC compliance reports
+  - id: conn-7
+    name: Prisma/SQL
+    originId: app-workflow-engine
+    targetId: store-relational-db
+    direction: outgoing
+    description: Updates step status and logs SLA breaches upon timeout
+  - id: conn-8
+    name: Cypher/Bolt
+    originId: app-workflow-engine
+    targetId: store-graph-db
+    direction: outgoing
+    description: Generates PredictedRisk nodes mapped to CQC Framework upon SLA breach
+  - id: conn-9
+    name: Connects
+    originId: app-data-pipeline
+    targetId: app-local-embedding
+    direction: bidirectional
+    description: Sends chunked text to generate secure vector embeddings
+  - id: conn-10
+    name: Cypher/Bolt
+    originId: app-data-pipeline
+    targetId: store-graph-db
+    direction: outgoing
+    description: Writes grounded nodes, relationships, and vectors

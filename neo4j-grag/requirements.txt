@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+neo4j
+neo4j-graphrag[google]
+pydantic
+python-dotenv

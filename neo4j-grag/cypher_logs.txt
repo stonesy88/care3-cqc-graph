@@ -1,0 +1,260 @@
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (rf:RiskFlag)
+WHERE rf.description CONTAINS 'hot water'
+MATCH (qs:QualityStatementAssessment)-[r1:HAS_RISK_FLAG]->(rf)
+MATCH (kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs)
+MATCH (loc:Location)-[r3:HAS_KQ_ASSESSMENT]->(kq)
+WITH collect(distinct rf) + collect(distinct qs) + collect(distinct kq) + collect(distinct loc) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (kq:KeyQuestionAssessment)
+WHERE kq.kq_name CONTAINS 'care'
+WITH collect(distinct kq) AS rawNodes, [] AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_RISK_FLAG]->(risk:RiskFlag)
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct risk) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding {type: 'risk'})
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding {type: 'risk'})
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (f:Finding)<-[r3:HAS_FINDING]-(qs:QualityStatementAssessment)<-[r2:HAS_QS_ASSESSMENT]-(kq:KeyQuestionAssessment)<-[r1:HAS_KQ_ASSESSMENT]-(loc:Location)
+WHERE f.type = 'risk' AND f.description CONTAINS 'hot water'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (f:Finding)<-[r3:HAS_FINDING]-(qs:QualityStatementAssessment)<-[r2:HAS_QS_ASSESSMENT]-(kq:KeyQuestionAssessment)<-[r1:HAS_KQ_ASSESSMENT]-(loc:Location)
+WHERE f.type = 'risk' AND f.description CONTAINS 'hot water'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk' AND (f.description CONTAINS 'hot water' OR f.description CONTAINS 'Hot water')
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk' AND (f.description CONTAINS 'hot water' OR f.description CONTAINS 'Hot water')
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (f:Finding)<-[r3:HAS_FINDING]-(qs:QualityStatementAssessment)<-[r2:HAS_QS_ASSESSMENT]-(kq:KeyQuestionAssessment)<-[r1:HAS_KQ_ASSESSMENT]-(loc:Location)
+WHERE f.type = 'risk' AND f.description CONTAINS 'hot water'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk' AND (f.description CONTAINS 'hot water' OR f.description CONTAINS 'Hot water')
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk' AND (f.description CONTAINS 'hot water' OR f.description CONTAINS 'Hot water')
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk' AND (f.description CONTAINS 'hot water' OR f.description CONTAINS 'Hot water')
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk' AND (f.description CONTAINS 'hot water' OR f.description CONTAINS 'Hot water')
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: CASE WHEN node.type = 'risk' THEN 'RiskFlag' WHEN node.type = 'positive' THEN 'PositivePractice' ELSE labels(node)[0] END, name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown'), properties: { type: node.type } }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (f:Finding)<-[r3:HAS_FINDING]-(qs:QualityStatementAssessment)<-[r2:HAS_QS_ASSESSMENT]-(kq:KeyQuestionAssessment)<-[r1:HAS_KQ_ASSESSMENT]-(loc:Location)
+WHERE f.type = 'risk' AND f.description CONTAINS 'hot water'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: CASE WHEN node.type = 'risk' THEN 'RiskFlag' WHEN node.type = 'positive' THEN 'PositivePractice' ELSE labels(node)[0] END, name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown'), properties: { type: node.type } }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.description =~ '(?i).*staff.*' OR f.description =~ '(?i).*personnel.*'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.description =~ '(?i).*staff.*' OR f.description =~ '(?i).*employee.*' OR f.description =~ '(?i).*personnel.*'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.description =~ '(?i).*staff.*' OR f.description =~ '(?i).*employee.*' OR f.description =~ '(?i).*personnel.*'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.description =~ '(?i).*staff.*' OR f.description =~ '(?i).*employee.*' OR f.description =~ '(?i).*workforce.*'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE toLower(f.description) CONTAINS 'staff'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: CASE WHEN node.type = 'risk' THEN 'RiskFlag' WHEN node.type = 'positive' THEN 'PositivePractice' ELSE labels(node)[0] END, name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.description CONTAINS 'staff' OR f.description CONTAINS 'staffing'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: CASE WHEN node.type = 'risk' THEN 'RiskFlag' WHEN node.type = 'positive' THEN 'PositivePractice' ELSE labels(node)[0] END, name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown'), properties: { type: node.type } }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE toLower(f.description) CONTAINS 'staff'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.description CONTAINS 'staff'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.description =~ '(?i).*staff.*' OR f.description =~ '(?i).*employee.*' OR f.description =~ '(?i).*workforce.*'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk' AND (f.description CONTAINS 'hot water' OR f.description CONTAINS 'Hot water')
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: CASE WHEN node.type = 'risk' THEN 'RiskFlag' WHEN node.type = 'positive' THEN 'PositivePractice' ELSE labels(node)[0] END, name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown'), properties: { type: node.type } }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links
+
+--- NATIVE STRUCTURAL CYPHER ---
+MATCH (loc:Location)-[r1:HAS_KQ_ASSESSMENT]->(kq:KeyQuestionAssessment)-[r2:HAS_QS_ASSESSMENT]->(qs:QualityStatementAssessment)-[r3:HAS_FINDING]->(f:Finding)
+WHERE f.type = 'risk'
+WITH collect(distinct loc) + collect(distinct kq) + collect(distinct qs) + collect(distinct f) AS rawNodes, collect(distinct r1) + collect(distinct r2) + collect(distinct r3) AS rawRels
+UNWIND rawNodes AS node WITH DISTINCT node, rawRels WHERE node IS NOT NULL
+WITH collect({ id: elementId(node), group: labels(node)[0], name: coalesce(node.name, node.kq_name, node.qs_name, node.description, 'Unknown') }) AS nodes, rawRels
+UNWIND rawRels AS rel WITH DISTINCT rel, nodes WHERE rel IS NOT NULL
+WITH nodes, collect({ source: elementId(startNode(rel)), target: elementId(endNode(rel)), label: type(rel) }) AS links
+RETURN nodes, links

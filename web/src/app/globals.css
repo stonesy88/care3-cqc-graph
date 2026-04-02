@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-surface-dim: #d2d4db;
+  --color-surface-container: #e7e8ee;
+  --color-on-tertiary: #feeeff;
+  --color-on-surface: #2d2f33;
+  --color-on-secondary-container: #005d21;
+  --color-background: #f6f6fb;
+  --color-secondary-container: #6ffb85;
+  --color-secondary-dim: #005d21;
+  --color-surface-container-high: #e1e2e8;
+  --color-primary-dim: #004ca4;
+  --color-tertiary-fixed-dim: #d57fff;
+  --color-primary: #0058bb;
+  --color-tertiary-container: #dd94ff;
+  --color-on-primary-fixed-variant: #002a61;
+  --color-secondary-fixed-dim: #60ec79;
+  --color-on-error-container: #570008;
+  --color-inverse-primary: #4b8eff;
+  --color-primary-fixed-dim: #5191ff;
+  --color-on-tertiary-fixed-variant: #5e0087;
+  --color-on-secondary-fixed: #004818;
+  --color-outline-variant: #acadb1;
+  --color-outline: #75777b;
+  --color-on-secondary-fixed-variant: #006826;
+  --color-on-background: #2d2f33;
+  --color-surface-variant: #dbdde3;
+  --color-on-primary: #f0f2ff;
+  --color-surface-bright: #f6f6fb;
+  --color-surface-container-low: #f0f0f6;
+  --color-primary-fixed: #6c9fff;
+  --color-inverse-on-surface: #9c9da1;
+  --color-surface: #f6f6fb;
+  --color-on-error: #ffefee;
+  --color-error-container: #fb5151;
+  --color-surface-container-lowest: #ffffff;
+  --color-tertiary: #8a2ab9;
+  --color-error: #b31b25;
+  --color-inverse-surface: #0c0e12;
+  --color-surface-tint: #0058bb;
+  --color-secondary-fixed: #6ffb85;
+  --color-on-primary-container: #00214f;
+  --color-tertiary-dim: #7c18ac;
+  --color-error-dim: #9f0519;
+  --color-on-tertiary-fixed: #2b0041;
+  --color-on-secondary: #cfffcd;
+  --color-secondary: #006a26;
+  --color-primary-container: #6c9fff;
+  --color-surface-container-highest: #dbdde3;
+  --color-on-surface-variant: #5a5b60;
+  --color-tertiary-fixed: #dd94ff;
+  --color-on-tertiary-container: #510074;
+  --color-on-primary-fixed: #000000;
+  
+  --font-headline: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Inter", sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.node-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .7; }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 88, 187, 0.15);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 88, 187, 0.3);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+}

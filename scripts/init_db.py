@@ -34,8 +34,10 @@ ON CREATE SET reg.name = regData.reg_name
 
 commands = [
     # Vector Indexes
-    "CREATE VECTOR INDEX risk_index IF NOT EXISTS FOR (r:RiskFlag) ON (r.embedding) OPTIONS { indexConfig: { `vector.dimensions`: 768, `vector.similarity_function`: 'cosine' } }",
-    "CREATE VECTOR INDEX practice_index IF NOT EXISTS FOR (p:PositivePractice) ON (p.embedding) OPTIONS { indexConfig: { `vector.dimensions`: 768, `vector.similarity_function`: 'cosine' } }",
+    "CREATE VECTOR INDEX finding_index IF NOT EXISTS FOR (f:Finding) ON (f.embedding) OPTIONS { indexConfig: { `vector.dimensions`: 768, `vector.similarity_function`: 'cosine' } }",
+    
+    # Full-Text Index
+    "CREATE FULLTEXT INDEX finding_text IF NOT EXISTS FOR (f:Finding) ON EACH [f.description]",
     
     # Constraints
     "CREATE CONSTRAINT unique_location_id IF NOT EXISTS FOR (loc:Location) REQUIRE loc.location_id IS UNIQUE",
@@ -45,7 +47,10 @@ commands = [
     "CREATE CONSTRAINT unique_provider_id IF NOT EXISTS FOR (prov:Provider) REQUIRE prov.provider_id IS UNIQUE",
     "CREATE CONSTRAINT unique_specialism_name IF NOT EXISTS FOR (spec:Specialism) REQUIRE spec.name IS UNIQUE",
     "CREATE CONSTRAINT unique_service_type_name IF NOT EXISTS FOR (svc:ServiceType) REQUIRE svc.name IS UNIQUE",
-    "CREATE CONSTRAINT unique_reg_id IF NOT EXISTS FOR (reg:Regulation) REQUIRE reg.reg_id IS UNIQUE"
+    "CREATE CONSTRAINT unique_reg_id IF NOT EXISTS FOR (reg:Regulation) REQUIRE reg.reg_id IS UNIQUE",
+    "CREATE CONSTRAINT unique_finding_id IF NOT EXISTS FOR (f:Finding) REQUIRE f.finding_id IS UNIQUE",
+    "CREATE CONSTRAINT unique_policy_id IF NOT EXISTS FOR (p:Policy) REQUIRE p.policy_id IS UNIQUE",
+    "CREATE CONSTRAINT unique_breach_id IF NOT EXISTS FOR (b:PolicyBreach) REQUIRE b.breach_id IS UNIQUE"
 ]
 
 def init_db():
